@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hyani</title>
+    <meta name="description" content="hyani - The Best Anime Experience">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo" id="home-btn"><h1>hyani</h1></a>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search anime...">
+                <button id="search-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- HOME VIEW -->
+    <main id="home-view" class="view-active">
+        <section class="hero" id="hero-section">
+            <div class="hero-bg" id="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="spotlight">#1 Spotlight</div>
+                <h2 id="hero-title">Loading...</h2>
+                <div class="hero-meta" id="hero-meta"></div>
+                <p class="hero-synopsis" id="hero-synopsis"></p>
+                <div class="hero-actions">
+                    <button class="btn-primary" id="hero-watch-btn">▶ Watch Now</button>
+                    <button class="btn-secondary" id="hero-details-btn">Details ></button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container main-content">
+            <div class="content-left">
+                <section class="section">
+                    <h2 class="section-title">Trending Anime</h2>
+                    <div id="trending-grid" class="anime-grid"></div>
+                </section>
+                
+                <section class="section">
+                    <h2 class="section-title">All Time Popular</h2>
+                    <div id="popular-grid" class="anime-grid"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <main id="player-view" class="view-hidden">
+        <div class="player-container">
+            <div class="player-main">
+                <div class="server-selection">
+                    <div class="server-group">
+                        <span class="server-label">SUB:</span>
+                        <button class="server-btn active" data-server="sub1">Megaplay</button>
+                        <button class="server-btn" data-server="sub2">Vidnest</button>
+                        <button class="server-btn" data-server="sub3">TryEmbed</button>
+                    </div>
+                    <div class="server-group">
+                        <span class="server-label">DUB:</span>
+                        <button class="server-btn" data-server="dub1">VindLink</button>
+                        <button class="server-btn" data-server="dub2">Vidsrc</button>
+                        <button class="server-btn" data-server="dub3">Megaplay</button>
+                    </div>
+                </div>
+                <div class="video-wrapper">
+                    <iframe id="iframe-player" class="hidden" allowfullscreen></iframe>
+                    <div id="now-playing" class="now-playing">Select an episode. (Tip: Use the player's ⚙️ Settings icon to switch Audio/Subtitles!)</div>
+                </div>
+                
+                <div class="anime-details">
+                    <div style="display: flex; gap: 2rem;">
+                        <img id="details-poster" src="" alt="Poster" class="details-poster">
+                        <div>
+                            <h2 id="details-title">Title</h2>
+                            <div class="details-meta-bar">
+                                <span class="badge" id="details-status">Status</span>
+                                <span class="badge badge-outline" id="details-rating">Rating</span>
+                            </div>
+                            <p id="details-desc" class="details-desc">Description</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="episodes-sidebar">
+                <div class="episodes-header">
+                    <h3>Episodes</h3>
+                    <input type="text" id="episode-search" placeholder="Search ep number...">
+                </div>
+                <ul class="episodes-list" id="episodes-list"></ul>
+            </div>
+        </div>
+    </main>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>window.API_BASE = '';</script>
+</body>
+</html>
