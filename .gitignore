@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+dist/
+coverage/
+node_modules/
+videos/
+.puppeteer_cache/
+.env
+.DS_Store
+npm-debug.log
+coverage/
+.vscode/
