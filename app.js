@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!q) return;
         showLoading();
         try {
-            const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+            const res = await fetch(api(`/api/search?q=${encodeURIComponent(q)}`));
             const data = await res.json();
             renderGrid(data, 'trending-grid');
             document.querySelector('.section-title').textContent = `Search Results: "${q}"`;
@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchLocalLibrary() {
         try {
+            // If using a remote API base (Render), skip attempting a local library endpoint
+            if (API_BASE) { localLibrary = []; return; }
             const res = await fetch(api('/api/library'));
             if (res.ok) localLibrary = await res.json();
         } catch (e) { localLibrary = []; }
