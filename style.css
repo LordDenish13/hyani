@@ -441,13 +441,15 @@ body.mobile-device .now-playing {
 .mobile-search-btn { display: none; background: transparent; border: none; color: var(--text-primary); cursor: pointer; }
 .mobile-search-btn svg { display: block; }
 
-/* Hide full search bar on mobile; show the icon instead. Toggle reveals the search bar. */
-body.mobile-device .search-bar { display: none !important; }
-body.mobile-device .mobile-search-btn { display: block; }
-.nav-content.search-open .search-bar { display: flex !important; width: 100%; margin-top: 0.5rem; }
-.nav-content.search-open { flex-direction: column; align-items: stretch; }
-
-/* Increase top padding for player view on mobile so navbar doesn't overlap */
+/* Mobile-only behavior: show icon, hide full search bar until toggled */
 @media (max-width: 768px) {
-    #player-view { padding-top: 120px; }
+    .mobile-search-btn { display: block; }
+    body.mobile-device .search-bar { display: none !important; }
+    /* When body has .search-open and is mobile, reveal the search bar and expand navbar height */
+    body.mobile-device.search-open .search-bar { display: flex !important; width: 100%; margin-top: 0.5rem; }
+    body.mobile-device.search-open .nav-content { flex-direction: column; align-items: stretch; }
+    /* Increase top padding for player view when search is open so navbar won't overlap content */
+    body.mobile-device.search-open #player-view { padding-top: 200px; }
+    /* default player view padding on mobile */
+    body.mobile-device #player-view { padding-top: 120px; }
 }

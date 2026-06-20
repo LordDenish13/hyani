@@ -58,64 +58,7 @@
         </div>
     </main>
 
-    <main id="player-view" class="view-hidden">
-        <div class="player-container">
-            <div class="player-main">
-                <div class="server-selection">
-                    <div class="server-group">
-                        <span class="server-label">SUB:</span>
-                        <button class="server-btn active" data-server="sub1">Megaplay</button>
-                        <button class="server-btn" data-server="sub2">Vidnest</button>
-                        <button class="server-btn" data-server="sub3">TryEmbed</button>
-                    </div>
-                    <div class="server-group">
-                        <span class="server-label">DUB:</span>
-                        <button class="server-btn" data-server="dub1">VindLink</button>
-                        <button class="server-btn" data-server="dub2">Vidsrc</button>
-                        <button class="server-btn" data-server="dub3">Megaplay</button>
-                    </div>
-                </div>
-                <div class="video-wrapper">
-                    <iframe id="iframe-player" class="hidden" allowfullscreen></iframe>
-                    <div id="now-playing" class="now-playing">Select an episode. (Tip: Use the player's ⚙️ Settings icon to switch Audio/Subtitles!)</div>
-                </div>
-                <div class="player-controls">
-                    <div class="controls-left">
-                        <button id="prev-ep" class="control-btn control-secondary">⟵ Prev</button>
-                        <button id="next-ep" class="control-btn control-primary">Next ⟶</button>
-                    </div>
-                    <div class="controls-right">
-                        <label class="auto-next">
-                            <input type="checkbox" id="auto-next-toggle">
-                            Auto Next
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="anime-details">
-                    <div style="display: flex; gap: 2rem;">
-                        <img id="details-poster" src="" alt="Poster" class="details-poster">
-                        <div>
-                            <h2 id="details-title">Title</h2>
-                            <div class="details-meta-bar">
-                                <span class="badge" id="details-status">Status</span>
-                                <span class="badge badge-outline" id="details-rating">Rating</span>
-                            </div>
-                            <p id="details-desc" class="details-desc">Description</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="episodes-sidebar">
-                <div class="episodes-header">
-                    <h3>Episodes</h3>
-                    <input type="text" id="episode-search" placeholder="Search ep number...">
-                </div>
-                <ul class="episodes-list" id="episodes-list"></ul>
-            </div>
-        </div>
-    </main>
+    <!-- Player moved to player.html -->
 
     <div id="loading-overlay" class="loading-overlay hidden">
         <div class="spinner"></div>

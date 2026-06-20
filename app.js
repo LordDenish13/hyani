@@ -16,19 +16,39 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEpNumber = null;
     let currentAnimeTitle = null;
     applyMobileLayout();
-    init();
+    pageInit();
 
-    // Mobile search toggle
+    function navigateToPlayer(id) {
+        if (!id) return;
+        const target = `player.html?id=${encodeURIComponent(id)}`;
+        window.location.href = target;
+    }
+
+    // Mobile search toggle (only acts on mobile)
     const mobileSearchBtn = document.getElementById('mobile-search-btn');
-    if (mobileSearchBtn && navContent) {
+    if (mobileSearchBtn) {
         mobileSearchBtn.addEventListener('click', () => {
-            navContent.classList.toggle('search-open');
+            if (!document.body.classList.contains('mobile-device')) return;
+            document.body.classList.toggle('search-open');
             const input = document.querySelector('.search-bar input');
-            if (navContent.classList.contains('search-open')) {
-                setTimeout(() => input && input.focus(), 60);
+            if (document.body.classList.contains('search-open')) {
+                setTimeout(() => input && input.focus(), 80);
             }
         });
     }
+
+    // Keep mobile-device and search-open state in sync on resize
+    window.addEventListener('resize', () => {
+        const mobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+            || window.innerWidth <= 768;
+        if (mobile) {
+            document.body.classList.add('mobile-device');
+        } else {
+            document.body.classList.remove('mobile-device');
+            // remove search-open when leaving mobile to avoid desktop overlap
+            document.body.classList.remove('search-open');
+        }
+    });
 
     function isMobileDevice() {
         return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -51,6 +71,41 @@ document.addEventListener('DOMContentLoaded', () => {
         hideLoading();
     }
 
+    async function pageInit() {
+        const isHome = !!document.getElementById('home-view');
+        const isPlayer = !!document.getElementById('player-view');
+
+        if (isHome) {
+            await init();
+            // If a search query param exists, perform a server search and render
+            const params = new URLSearchParams(window.location.search);
+            const q = params.get('q');
+            if (q) {
+                try {
+                    showLoading();
+                    const res = await fetch(api(`/api/search?q=${encodeURIComponent(q)}`));
+                    const data = await res.json();
+                    renderGrid(data, 'trending-grid');
+                    document.querySelector('.section-title').textContent = `Search Results: "${q}"`;
+                    const popularParent = document.getElementById('popular-grid') && document.getElementById('popular-grid').parentElement;
+                    if (popularParent) popularParent.style.display = 'none';
+                    const hero = document.getElementById('hero-section'); if (hero) hero.style.display = 'none';
+                } catch (e) { console.error('Search load error', e); }
+                hideLoading();
+            }
+        }
+
+        if (isPlayer) {
+            // On player page, read id param and load the anime
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (id) {
+                // openPlayer will fetch and render on the player page
+                openPlayer(id);
+            }
+        }
+    }
+
     // ── Navigation ──
     document.getElementById('home-btn').addEventListener('click', (e) => {
         e.preventDefault();
@@ -63,20 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function doSearch() {
-        const q = document.getElementById('search-input').value.trim();
+        const el = document.getElementById('search-input');
+        if (!el) return;
+        const q = el.value.trim();
         if (!q) return;
-        showLoading();
-        try {
-            const res = await fetch(api(`/api/search?q=${encodeURIComponent(q)}`));
-            const data = await res.json();
-            renderGrid(data, 'trending-grid');
-            document.querySelector('.section-title').textContent = `Search Results: "${q}"`;
-            document.getElementById('popular-grid').parentElement.style.display = 'none';
-            document.getElementById('hero-section').style.display = 'none';
-        } catch (e) {
-            console.error('Search error:', e);
-        }
-        hideLoading();
+        // Navigate to the home page with query param so server-side search loads there
+        const target = `index.html?q=${encodeURIComponent(q)}`;
+        window.location.href = target;
     }
 
     // ── Data fetching ──
@@ -127,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = anime.description ? anime.description.replace(/<[^>]*>?/gm, '').substring(0, 250) : '';
         document.getElementById('hero-synopsis').textContent = desc ? desc + '...' : '';
 
-        document.getElementById('hero-watch-btn').onclick = () => openPlayer(anime.id);
-        document.getElementById('hero-details-btn').onclick = () => openPlayer(anime.id);
+        document.getElementById('hero-watch-btn').onclick = () => navigateToPlayer(anime.id);
+        document.getElementById('hero-details-btn').onclick = () => navigateToPlayer(anime.id);
     }
 
     function renderGrid(animeList, gridId) {
@@ -158,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="meta"><span>${type}</span><span>${year}</span></div>
                 </div>
             `;
-            card.onclick = () => openPlayer(anime.id);
+            card.onclick = () => navigateToPlayer(anime.id);
             grid.appendChild(card);
         });
     }
@@ -174,8 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentAnimeId = data.id;
 
-            homeView.classList.replace('view-active', 'view-hidden');
-            playerView.classList.replace('view-hidden', 'view-active');
+            // If both home and player views exist (SPA mode), toggle them. Otherwise just ensure viewport at top.
+            if (homeView && playerView && homeView.classList && playerView.classList) {
+                try { homeView.classList.replace('view-active', 'view-hidden'); } catch (e) {}
+                try { playerView.classList.replace('view-hidden', 'view-active'); } catch (e) {}
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             const title = getTitle(data);
