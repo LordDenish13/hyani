@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const homeView = document.getElementById('home-view');
     const playerView = document.getElementById('player-view');
+    const navContent = document.querySelector('.nav-content');
     const loadingOverlay = document.getElementById('loading-overlay');
     const nowPlayingText = document.getElementById('now-playing');
     let localLibrary = [];
@@ -16,6 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentAnimeTitle = null;
     applyMobileLayout();
     init();
+
+    // Mobile search toggle
+    const mobileSearchBtn = document.getElementById('mobile-search-btn');
+    if (mobileSearchBtn && navContent) {
+        mobileSearchBtn.addEventListener('click', () => {
+            navContent.classList.toggle('search-open');
+            const input = document.querySelector('.search-bar input');
+            if (navContent.classList.contains('search-open')) {
+                setTimeout(() => input && input.focus(), 60);
+            }
+        });
+    }
 
     function isMobileDevice() {
         return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
