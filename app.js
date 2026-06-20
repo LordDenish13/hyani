@@ -11,7 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let localLibrary = [];
     let allEpisodes = [];
 
+    applyMobileLayout();
     init();
+
+    function isMobileDevice() {
+        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+            || window.innerWidth <= 768;
+    }
+
+    function applyMobileLayout() {
+        if (isMobileDevice()) {
+            document.body.classList.add('mobile-device');
+        }
+    }
 
     async function init() {
         showLoading();

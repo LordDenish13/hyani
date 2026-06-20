@@ -219,3 +219,130 @@ body {
     .hero { height: auto; padding-top: 8rem; }
     .anime-details > div { flex-direction: column; }
 }
+
+body.mobile-device {
+    font-size: 0.95rem;
+}
+
+body.mobile-device .nav-content {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1rem 0.75rem;
+}
+
+body.mobile-device .search-bar {
+    width: 100%;
+    min-width: 0;
+}
+
+body.mobile-device .search-bar input {
+    width: 100%;
+}
+
+body.mobile-device .hero {
+    height: auto;
+    min-height: 70vh;
+    align-items: flex-start;
+    padding: 5rem 0 2rem;
+    margin-top: 70px;
+}
+
+body.mobile-device .hero-content {
+    padding: 0 1rem;
+}
+
+body.mobile-device .hero-content h2 {
+    font-size: 2.2rem;
+    max-width: 100%;
+}
+
+body.mobile-device .hero-meta {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+body.mobile-device .hero-synopsis {
+    max-width: 100%;
+    font-size: 1rem;
+}
+
+body.mobile-device .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+body.mobile-device .btn-primary,
+body.mobile-device .btn-secondary {
+    width: 100%;
+    padding: 1rem 1.25rem;
+}
+
+body.mobile-device .container {
+    padding: 0 1rem;
+}
+
+body.mobile-device .main-content {
+    margin-top: 1.5rem;
+}
+
+body.mobile-device .anime-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+body.mobile-device .player-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1rem 2rem;
+}
+
+body.mobile-device .player-main,
+body.mobile-device .episodes-sidebar {
+    width: 100%;
+}
+
+body.mobile-device .episodes-sidebar {
+    position: static;
+    height: auto;
+    max-height: none;
+}
+
+body.mobile-device .anime-details {
+    padding: 1.25rem;
+}
+
+body.mobile-device .anime-details > div {
+    flex-direction: column;
+    gap: 1rem;
+}
+
+body.mobile-device .details-poster {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+}
+
+body.mobile-device .episodes-header,
+body.mobile-device .episodes-list {
+    padding: 1rem;
+}
+
+body.mobile-device .episodes-list {
+    max-height: 320px;
+}
+
+body.mobile-device .server-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+body.mobile-device .server-btn {
+    flex: 1 1 calc(50% - 0.75rem);
+    min-width: 120px;
+}
+
+body.mobile-device .server-label {
+    width: auto;
+}
