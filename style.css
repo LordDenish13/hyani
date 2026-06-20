@@ -395,15 +395,33 @@ body.mobile-device .now-playing {
 .player-controls .controls-right { display: flex; align-items: center; }
 
 .control-btn {
-    background: var(--bg-tertiary);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     color: var(--text-primary);
     border: 1px solid rgba(255,255,255,0.06);
-    padding: 0.55rem 0.9rem;
-    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 96px;
+    justify-content: center;
 }
-.control-btn:hover { background: rgba(202,134,255,0.08); border-color: var(--accent-primary); }
+.control-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.6); }
+
+.control-primary {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
+    color: #000;
+    border-color: rgba(202,134,255,0.6);
+}
+.control-primary:hover { filter: brightness(1.03); }
+
+.control-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255,255,255,0.06);
+}
 
 .auto-next { color: var(--text-secondary); font-weight: 600; display: flex; gap: 0.5rem; align-items: center; }
 .auto-next input { width: 16px; height: 16px; }

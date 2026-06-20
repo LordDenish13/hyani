@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerView = document.getElementById('player-view');
     const loadingOverlay = document.getElementById('loading-overlay');
     const nowPlayingText = document.getElementById('now-playing');
-
     let localLibrary = [];
     let allEpisodes = [];
 
+    // Track current state to handle server switching and controls
+    let currentAnimeId = null;
+    let currentEpNumber = null;
+    let currentAnimeTitle = null;
     applyMobileLayout();
     init();
 
@@ -172,9 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
             allEpisodes = data.episodes || [];
             renderEpisodes(allEpisodes, title);
 
-            // Auto-start episode 1 when opening a show's player
+            // Auto-start episode 1 when opening a show's player.
+            // Prefer explicit episode with number === 1; otherwise pick the smallest episode number.
             if (allEpisodes && allEpisodes.length > 0) {
-                const firstEp = allEpisodes[0];
+                let firstEp = allEpisodes.find(ep => Number(ep.number) === 1) || null;
+                if (!firstEp) {
+                    // find smallest numeric episode
+                    firstEp = allEpisodes.slice().sort((a,b) => Number(a.number) - Number(b.number))[0];
+                }
                 // Small delay to allow UI to render
                 setTimeout(() => playEpisode(firstEp.number, title, currentAnimeId), 150);
             }
@@ -203,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         episodes.forEach(ep => {
             const li = document.createElement('li');
             li.className = 'ep-item';
+            li.setAttribute('data-ep', String(ep.number));
             li.innerHTML = `
                 <span>EP ${ep.number} — ${ep.title || 'Episode ' + ep.number}</span>
             `;
@@ -286,10 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderEpisodes(filtered, document.getElementById('details-title').textContent);
     });
 
-    // Track current state to handle server switching
-    let currentAnimeId = null;
-    let currentEpNumber = null;
-    let currentAnimeTitle = null;
 
     // Handle Server Button Clicks
     document.querySelectorAll('.server-btn').forEach(btn => {
@@ -316,6 +321,16 @@ document.addEventListener('DOMContentLoaded', () => {
         currentEpNumber = epNumber;
         currentAnimeTitle = animeTitle;
         currentAnimeId = animeId;
+
+        // Highlight active episode in UI (works when episodes rendered)
+        try {
+            document.querySelectorAll('.ep-item').forEach(el => el.classList.remove('active'));
+            const activeLi = document.querySelector(`.ep-item[data-ep="${epNumber}"]`);
+            if (activeLi) {
+                activeLi.classList.add('active');
+                activeLi.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        } catch (e) { /* ignore */ }
 
         const serverId = getSelectedServer();
         nowPlayingText.textContent = `Loading Episode ${epNumber}...`;
