@@ -300,6 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const activeBtnName = document.querySelector('.server-btn.active').textContent;
         loadIframe(iframeUrl, `Episode ${epNumber} (${activeBtnName})`);
+        const iframePlayer = document.getElementById('iframe-player');
+        if (iframePlayer) {
+            iframePlayer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 
     function loadIframe(url, displayText) {
