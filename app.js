@@ -106,12 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ── Navigation ──
-    document.getElementById('home-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        location.reload();
-    });
-
     document.getElementById('search-btn').addEventListener('click', doSearch);
     document.getElementById('search-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') doSearch();
