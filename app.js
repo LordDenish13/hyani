@@ -172,7 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
             allEpisodes = data.episodes || [];
             renderEpisodes(allEpisodes, title);
 
-            nowPlayingText.textContent = allEpisodes.length > 0 ? 'Select an episode to start watching.' : 'No episodes available.';
+            // Auto-start episode 1 when opening a show's player
+            if (allEpisodes && allEpisodes.length > 0) {
+                const firstEp = allEpisodes[0];
+                // Small delay to allow UI to render
+                setTimeout(() => playEpisode(firstEp.number, title, currentAnimeId), 150);
+            }
             
             const iframePlayer = document.getElementById('iframe-player');
             if (iframePlayer) {
@@ -209,6 +214,68 @@ document.addEventListener('DOMContentLoaded', () => {
             list.appendChild(li);
         });
     }
+
+    // ── Player Controls: Next / Prev / AutoNext ──
+    const AUTO_NEXT_KEY = 'hyani_auto_next';
+    const nextBtn = document.getElementById('next-ep');
+    const prevBtn = document.getElementById('prev-ep');
+    const autoNextToggle = document.getElementById('auto-next-toggle');
+
+    // Initialize toggle from localStorage
+    try { autoNextToggle.checked = localStorage.getItem(AUTO_NEXT_KEY) === '1'; } catch (e) {}
+
+    function findEpisodeIndex(number) {
+        return allEpisodes.findIndex(ep => String(ep.number) === String(number));
+    }
+
+    function nextEpisode() {
+        if (!allEpisodes || allEpisodes.length === 0 || currentEpNumber === null) return;
+        const idx = findEpisodeIndex(currentEpNumber);
+        if (idx >= 0 && idx < allEpisodes.length - 1) {
+            const next = allEpisodes[idx + 1];
+            playEpisode(next.number, currentAnimeTitle, currentAnimeId);
+        }
+    }
+
+    function prevEpisode() {
+        if (!allEpisodes || allEpisodes.length === 0 || currentEpNumber === null) return;
+        const idx = findEpisodeIndex(currentEpNumber);
+        if (idx > 0) {
+            const prev = allEpisodes[idx - 1];
+            playEpisode(prev.number, currentAnimeTitle, currentAnimeId);
+        }
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', nextEpisode);
+    if (prevBtn) prevBtn.addEventListener('click', prevEpisode);
+    if (autoNextToggle) {
+        autoNextToggle.addEventListener('change', (e) => {
+            try { localStorage.setItem(AUTO_NEXT_KEY, e.target.checked ? '1' : '0'); } catch (err) {}
+        });
+    }
+
+    // Listen for common postMessage signals from embeds (many players post events)
+    window.addEventListener('message', (ev) => {
+        if (!autoNextToggle || !autoNextToggle.checked) return;
+        const data = ev.data;
+        if (!data) return;
+        // handle several common shapes
+        try {
+            if (typeof data === 'string') {
+                if (data.toLowerCase().includes('ended') || data.toLowerCase().includes('finish')) {
+                    nextEpisode();
+                }
+            } else if (typeof data === 'object') {
+                if (data.event === 'ended' || data.event === 'finish' || data.type === 'ended' || data.player === 'ended') {
+                    nextEpisode();
+                }
+                // Some players nest event names
+                if (data.data && (data.data.event === 'ended' || data.data.type === 'ended')) {
+                    nextEpisode();
+                }
+            }
+        } catch (e) { /* ignore parsing errors */ }
+    });
 
     document.getElementById('episode-search').addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase();

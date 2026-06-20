@@ -377,3 +377,38 @@ body.mobile-device .now-playing {
     font-size: 0.95rem;
     padding: 0.75rem 0.85rem;
 }
+
+/* Player controls (shared across desktop and mobile) */
+.player-controls {
+    margin-top: 0.75rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 0.6rem 0.8rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.player-controls .controls-left { display: flex; gap: 0.5rem; align-items: center; }
+.player-controls .controls-right { display: flex; align-items: center; }
+
+.control-btn {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.55rem 0.9rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.control-btn:hover { background: rgba(202,134,255,0.08); border-color: var(--accent-primary); }
+
+.auto-next { color: var(--text-secondary); font-weight: 600; display: flex; gap: 0.5rem; align-items: center; }
+.auto-next input { width: 16px; height: 16px; }
+
+@media (max-width: 768px) {
+    .player-controls { padding: 0.6rem 0.6rem; }
+    .control-btn { padding: 0.7rem 1rem; }
+}
